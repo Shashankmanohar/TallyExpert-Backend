@@ -24,6 +24,14 @@ const certificateSchema = new mongoose.Schema({
     certificateNumber: {
         type: String,
         required: true
+    },
+    courseOfDuration:{
+        type:String,
+        required:true,
+    },
+    courseName:{
+        type:String,
+        required:true,
     }
 })
 

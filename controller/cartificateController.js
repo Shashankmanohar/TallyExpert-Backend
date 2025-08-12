@@ -2,25 +2,39 @@ import Certificate from "../model/cartificateModel.js";
 
 const createCertificate = async (req, res) => {
  try {
-    const { studentName, fatherName, dateOfBirth, rollNo, passingYear, certificateNumber } = req.body;
-    if (!studentName || !fatherName || !dateOfBirth || !rollNo || !passingYear || !certificateNumber) {
+    
+    const { studentName, fatherName, dateOfBirth, rollNo, passingYear, certificateNumber, courseOfDuration, courseName } = req.body;
+    if (!studentName || !fatherName || !dateOfBirth || !rollNo || !passingYear || !certificateNumber || !courseOfDuration || !courseName) {
         return res.status(400).json({ message: "All fields are required" });
     }
+    
     const existingCertificate = await Certificate.findOne({ certificateNumber });
     if (existingCertificate) {
         return res.status(400).json({ message: "Certificate already exists" });
     }
-    const certificate = new Certificate({ studentName, fatherName, dateOfBirth, rollNo, passingYear, certificateNumber });
+    
+    const certificate = new Certificate({ 
+        studentName, 
+        fatherName, 
+        dateOfBirth: new Date(dateOfBirth), // Convert string to Date object
+        rollNo, 
+        passingYear, 
+        certificateNumber, 
+        courseOfDuration, 
+        courseName 
+    });
+    
     await certificate.save();
     res.status(201).json({ message: "Certificate created successfully", certificate });
  } catch (error) {
+    console.error('Error creating certificate:', error); // Debug log
     res.status(500).json({ message: error.message });
  }
 }
 
 const getOneCertificate = async (req, res) => {
     try {
-        const { studentName, fatherName, dateOfBirth, certificateNumber } = req.query;
+        const { studentName, fatherName, dateOfBirth, certificateNumber, } = req.query;
         if (!studentName || !fatherName || !dateOfBirth || !certificateNumber) {
             return res.status(400).json({ message: "All fields are required for verification" });
         }

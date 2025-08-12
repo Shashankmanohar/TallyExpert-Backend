@@ -13,7 +13,7 @@ app.use(express.json());
 dotenv.config();
 
 connectDB();
-
+app.get('/', (req, res) => res.send('Hello from backend!'))
 app.use("/api/admin", adminRoute);
 app.use("/api/certificate", certificateRoute);
 
